@@ -4,11 +4,11 @@ from baseApp.models import LocalComercial
 class LocalComercialSerializer_get(ModelSerializer):
     class Meta:
         model = LocalComercial
-        fields = ['nombre','direccion','link','horarioAtencion','tieneDelivery','estado',
+        fields = ['id','nombre','direccion','link','horarioAtencion','tieneDelivery','estado',
         'tieneMercadopago']
     
 class LocalComercialSerializer_post(ModelSerializer):
     class Meta:
         model = LocalComercial
-        fields = ['nombre','direccion','link','horarioAtencion','tieneDelivery','estado','publicKeyMercadopago',
+        fields = ['id','nombre','direccion','link','horarioAtencion','tieneDelivery','estado','publicKeyMercadopago',
         'privateKeyMercadopago','tieneMercadopago']

@@ -8,11 +8,6 @@ from baseApp.api.serializers import LocalComercialSerializer_get, LocalComercial
 
 
 class LocalComercialApiView(APIView):
-    def get_object(self, pk):
-        try:
-            return LocalComercial.objects.get(pk=pk)
-        except LocalComercial.DoesNotExist:
-            raise Http404
     """
     List all LocalComercial, or create a new LocalComercial.
     """
@@ -25,13 +20,35 @@ class LocalComercialApiView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+
+class LocalComercialApiView_Detail(APIView):
     """
     Retrieve, update or delete a LocalComercial instance.
     """
-    def get(self, request, format=None):
-        locales = LocalComercial.objects.all()
+    def get(self, request, pk, format=None):
+        try:
+            locales = LocalComercial.objects.get(id=pk)
+        except LocalComercial.DoesNotExist:
+            raise Http404
         serializer = LocalComercialSerializer_get(locales, many=True)
         return Response(serializer.data)
 
+    def put(self, request, pk, format=None):
+        try:
+            put = LocalComercial.objects.get(id=pk)
+        except LocalComercial.DoesNotExist:
+            raise Http404
+        serializer = LocalComercialSerializer_post(put, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, pk, format=None):
+        try:
+            local = LocalComercial.objects.get(id=pk)
+        except LocalComercial.DoesNotExist:
+            raise Http404
+        local.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
