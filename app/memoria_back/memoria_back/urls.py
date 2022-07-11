@@ -17,6 +17,7 @@ from baseApp.api.views import LocalComercialApiView, LocalComercialApiView_Detai
 from baseApp.api.views import VentaApiView, VentaApiView_Detail
 from baseApp.api.views import ProductoVentaApiView, ProductoVentaApiView_Detail
 from baseApp.api.views import CategoriaApiView, CategoriaApiView_Detail
+from baseApp.api.views import ProductoCategoriaApiView, ProductoCategoriaApiView_Detail
 from django.contrib import admin
 from django.urls import path
 
@@ -55,6 +56,10 @@ urlpatterns = [
     #Rutas para Categoria
     path('api/categorias/',CategoriaApiView.as_view()),
     path('api/categorias/<int:pk>/',CategoriaApiView_Detail.as_view()),
+
+    #Rutas para ProductoCategoria
+    path('api/productoCategorias/',ProductoCategoriaApiView.as_view()),
+    path('api/productoCategorias/<int:pk>/',ProductoCategoriaApiView_Detail.as_view()),
 
 
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

@@ -107,7 +107,7 @@ class VentaApiView_Detail(APIView):
 
 class ProductoVentaApiView(APIView):
     """
-    List all Venta, or create a new ProductoVenta.
+    List all ProductoVenta, or create a new ProductoVenta.
     """
     def get(self, request):
         serializer = ProductoVentaSerializer_get(ProductoVenta.objects.all(), many=True)
@@ -152,7 +152,7 @@ class ProductoVentaApiView_Detail(APIView):
 
 class CategoriaApiView(APIView):
     """
-    List all Venta, or create a new ProductoVenta.
+    List all Categoria, or create a new Categoria.
     """
     def get(self, request):
         serializer = CategoriaSerializer_get(Categoria.objects.all(), many=True)
@@ -166,7 +166,7 @@ class CategoriaApiView(APIView):
 
 class CategoriaApiView_Detail(APIView):
     """
-    Retrieve, update or delete a ProductoVenta instance.
+    Retrieve, update or delete a Categoria instance.
     """
     def get(self, request, pk, format=None):
         try:
@@ -193,4 +193,50 @@ class CategoriaApiView_Detail(APIView):
         except Categoria.DoesNotExist:
             raise Http404
         cat.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProductoCategoriaApiView(APIView):
+    """
+    List all ProductoCategoria, or create a new ProductoCategoria.
+    """
+    def get(self, request):
+        serializer = ProductoCategoriaSerializer_get(ProductoCategoria.objects.all(), many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+    
+    def post(self, request):
+        serializer = ProductoCategoriaSerializer_post(data=request.POST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+
+class ProductoCategoriaApiView_Detail(APIView):
+    """
+    Retrieve, update or delete a ProductoCategoria instance.
+    """
+    def get(self, request, pk, format=None):
+        try:
+            prod = ProductoCategoria.objects.get(id=pk)
+        except ProductoCategoria.DoesNotExist:
+            raise Http404
+        serializer = ProductoCategoriaSerializer_get(prod, many=False)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        try:
+            put = ProductoCategoria.objects.get(id=pk)
+        except ProductoCategoria.DoesNotExist:
+            raise Http404
+        serializer = ProductoCategoriaSerializer_post(put, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        try:
+            prod = ProductoCategoria.objects.get(id=pk)
+        except ProductoCategoria.DoesNotExist:
+            raise Http404
+        prod.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
