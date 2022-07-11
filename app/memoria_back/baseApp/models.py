@@ -31,3 +31,20 @@ class ProductoVenta(models.Model):
     descripcionProducto = models.TextField()
     notaEspecial = models.TextField()
     refVenta = models.ForeignKey(Venta,on_delete=models.CASCADE,default=1)
+
+""" Clase Categoria representa una CATEGORIA de una tienda virtual """
+class Categoria(models.Model):
+    nombre = models.CharField(max_length=255)
+    descripcion = models.TextField()
+    esVisible = models.BooleanField(default=False)
+    esNuevo = models.BooleanField(default=True)
+    refLocalComercial = models.ForeignKey(LocalComercial,on_delete=models.CASCADE,default=1)
+
+""" Clase ProductoCategoria representa un PRODUCTO de una CATEGORIA de una tienda virtual """
+class ProductoCategoria(models.Model):
+    nombre = models.CharField(max_length=255)
+    descripcion = models.TextField()
+    esVisible = models.BooleanField(default=False)
+    esNuevo = models.BooleanField(default=True)
+    isBestProduct = models.BooleanField(default=False)
+    refCategoria = models.ForeignKey(Categoria,on_delete=models.CASCADE,default=1)

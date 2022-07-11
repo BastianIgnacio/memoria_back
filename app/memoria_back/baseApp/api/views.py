@@ -6,9 +6,14 @@ from django.http import Http404
 from baseApp.models import LocalComercial
 from baseApp.models import Venta
 from baseApp.models import ProductoVenta
+from baseApp.models import Categoria
+from baseApp.models import ProductoCategoria
+
 from baseApp.api.serializers import LocalComercialSerializer_get, LocalComercialSerializer_post
 from baseApp.api.serializers import VentaSerializer_get, VentaSerializer_post
 from baseApp.api.serializers import ProductoVentaSerializer_get, ProductoVentaSerializer_post
+from baseApp.api.serializers import CategoriaSerializer_get, CategoriaSerializer_post
+from baseApp.api.serializers import ProductoCategoriaSerializer_get, ProductoCategoriaSerializer_post
 
 class LocalComercialApiView(APIView):
     """
@@ -143,4 +148,49 @@ class ProductoVentaApiView_Detail(APIView):
         except ProductoVenta.DoesNotExist:
             raise Http404
         pv.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class CategoriaApiView(APIView):
+    """
+    List all Venta, or create a new ProductoVenta.
+    """
+    def get(self, request):
+        serializer = CategoriaSerializer_get(Categoria.objects.all(), many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+    
+    def post(self, request):
+        serializer = CategoriaSerializer_post(data=request.POST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+
+class CategoriaApiView_Detail(APIView):
+    """
+    Retrieve, update or delete a ProductoVenta instance.
+    """
+    def get(self, request, pk, format=None):
+        try:
+            cat = Categoria.objects.get(id=pk)
+        except Categoria.DoesNotExist:
+            raise Http404
+        serializer = CategoriaSerializer_get(cat, many=False)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        try:
+            put = Categoria.objects.get(id=pk)
+        except Categoria.DoesNotExist:
+            raise Http404
+        serializer = CategoriaSerializer_post(put, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        try:
+            cat = Categoria.objects.get(id=pk)
+        except Categoria.DoesNotExist:
+            raise Http404
+        cat.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
