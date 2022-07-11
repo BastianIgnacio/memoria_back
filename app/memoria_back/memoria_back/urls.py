@@ -15,6 +15,7 @@ Including another URLconf
 """
 from baseApp.api.views import LocalComercialApiView, LocalComercialApiView_Detail
 from baseApp.api.views import VentaApiView, VentaApiView_Detail
+from baseApp.api.views import ProductoVentaApiView, ProductoVentaApiView_Detail
 from django.contrib import admin
 from django.urls import path
 
@@ -45,6 +46,11 @@ urlpatterns = [
     # Rutas para Venta
     path('api/ventas/',VentaApiView.as_view()),
     path('api/ventas/<int:pk>/',VentaApiView_Detail.as_view()),
+
+    # Rutas para ProductoVenta
+    path('api/productoVentas/',ProductoVentaApiView.as_view()),
+    path('api/productoVentas/<int:pk>/',ProductoVentaApiView_Detail.as_view()),
+
 
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redocs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
