@@ -18,7 +18,7 @@ class LocalComercial(models.Model):
 class Venta(models.Model):
     total = models.IntegerField()
     tipoPago = models.CharField(max_length=50)
-    fecha = models.DateField(auto_now_add=True)
+    fecha = models.DateTimeField(auto_now_add=True)
     refLocalComercial = models.ForeignKey(LocalComercial,on_delete=models.CASCADE,default=1)
 
 """ Clase ProductoVenta representa un producto que tiene una venta, con la finalidad de obtener 

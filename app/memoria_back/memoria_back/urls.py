@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from baseApp.api.views import LocalComercialApiView, LocalComercialApiView_Detail
+from baseApp.api.views import VentaApiView, VentaApiView_Detail
 from django.contrib import admin
 from django.urls import path
 
@@ -37,8 +38,13 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Rutas para Local Comerical
     path('api/localComercials/',LocalComercialApiView.as_view()),
     path('api/localComercials/<int:pk>/',LocalComercialApiView_Detail.as_view()),
+
+    # Rutas para Venta
+    path('api/ventas/',VentaApiView.as_view()),
+    path('api/ventas/<int:pk>/',VentaApiView_Detail.as_view()),
 
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redocs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
