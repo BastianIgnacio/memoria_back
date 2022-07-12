@@ -8,12 +8,16 @@ from baseApp.models import Venta
 from baseApp.models import ProductoVenta
 from baseApp.models import Categoria
 from baseApp.models import ProductoCategoria
+from baseApp.models import Orden
+from baseApp.models import ProductoOrden
 
 from baseApp.api.serializers import LocalComercialSerializer_get, LocalComercialSerializer_post
 from baseApp.api.serializers import VentaSerializer_get, VentaSerializer_post
 from baseApp.api.serializers import ProductoVentaSerializer_get, ProductoVentaSerializer_post
 from baseApp.api.serializers import CategoriaSerializer_get, CategoriaSerializer_post
 from baseApp.api.serializers import ProductoCategoriaSerializer_get, ProductoCategoriaSerializer_post
+from baseApp.api.serializers import OrdenSerializer_get,OrdenSerializer_post
+from baseApp.api.serializers import ProductoOrdenSerializer_get, ProductoOrdenSerializer_post
 
 class LocalComercialApiView(APIView):
     """
@@ -239,4 +243,94 @@ class ProductoCategoriaApiView_Detail(APIView):
         except ProductoCategoria.DoesNotExist:
             raise Http404
         prod.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class OrdenApiView(APIView):
+    """
+    List all Orden, or create a new Orden.
+    """
+    def get(self, request):
+        serializer = OrdenSerializer_get(Orden.objects.all(), many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+    
+    def post(self, request):
+        serializer = OrdenSerializer_post(data=request.POST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+
+class OrdenApiView_Detail(APIView):
+    """
+    Retrieve, update or delete a Orden instance.
+    """
+    def get(self, request, pk, format=None):
+        try:
+            orden = Orden.objects.get(id=pk)
+        except Orden.DoesNotExist:
+            raise Http404
+        serializer = OrdenSerializer_get(orden, many=False)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        try:
+            put = Orden.objects.get(id=pk)
+        except Orden.DoesNotExist:
+            raise Http404
+        serializer = OrdenSerializer_post(put, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        try:
+            orden = Orden.objects.get(id=pk)
+        except Orden.DoesNotExist:
+            raise Http404
+        orden.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ProductoOrdenApiView(APIView):
+    """
+    List all ProductoOrden, or create a new ProductoOrden.
+    """
+    def get(self, request):
+        serializer = ProductoOrdenSerializer_get(ProductoOrden.objects.all(), many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+    
+    def post(self, request):
+        serializer = ProductoOrdenSerializer_post(data=request.POST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+
+class ProductoOrdenApiView_Detail(APIView):
+    """
+    Retrieve, update or delete a ProductoOrden instance.
+    """
+    def get(self, request, pk, format=None):
+        try:
+            productoOrden = ProductoOrden.objects.get(id=pk)
+        except ProductoOrden.DoesNotExist:
+            raise Http404
+        serializer = ProductoOrdenSerializer_get(productoOrden, many=False)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        try:
+            put = ProductoOrden.objects.get(id=pk)
+        except ProductoOrden.DoesNotExist:
+            raise Http404
+        serializer = ProductoOrdenSerializer_post(put, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        try:
+            productoOrden = ProductoOrden.objects.get(id=pk)
+        except ProductoOrden.DoesNotExist:
+            raise Http404
+        productoOrden.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -7,6 +7,9 @@ from baseApp.models import ProductoVenta
 from baseApp.models import Categoria
 from baseApp.models import ProductoCategoria
 
+from baseApp.models import Orden
+from baseApp.models import ProductoOrden
+
 class LocalComercialSerializer_get(ModelSerializer):
     class Meta:
         model = LocalComercial
@@ -52,6 +55,23 @@ class ProductoCategoriaSerializer_post(ModelSerializer):
 class ProductoCategoriaSerializer_get(ModelSerializer):
     class Meta:
         model = ProductoCategoria
+        fields= '__all__'
+
+class OrdenSerializer_get(ModelSerializer):
+    class Meta:
+        model = Orden
+        fields= '__all__'
+class OrdenSerializer_post(ModelSerializer):
+    class Meta:
+        model = Orden
+        fields= '__all__'
+class ProductoOrdenSerializer_get(ModelSerializer):
+    class Meta:
+        model = ProductoOrden
+        fields= '__all__'
+class ProductoOrdenSerializer_post(ModelSerializer):
+    class Meta:
+        model = ProductoOrden
         fields= '__all__'
 
 
