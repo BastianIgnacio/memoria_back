@@ -22,7 +22,7 @@ from baseApp.api.views import OrdenApiView, OrdenApiView_Detail
 from baseApp.api.views import ProductoOrdenApiView, ProductoOrdenApiView_Detail
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -44,6 +44,10 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    #Rutas para JWT Auth 
+    path('api/', include('user.api.router')),
+
     # Rutas para Local Comerical
     path('api/localComercials/',LocalComercialApiView.as_view()),
     path('api/localComercials/<int:pk>/',LocalComercialApiView_Detail.as_view()),
