@@ -16,27 +16,32 @@ from baseApp.api.serializers import VentaSerializer_get, VentaSerializer_post
 from baseApp.api.serializers import ProductoVentaSerializer_get, ProductoVentaSerializer_post
 from baseApp.api.serializers import CategoriaSerializer_get, CategoriaSerializer_post
 from baseApp.api.serializers import ProductoCategoriaSerializer_get, ProductoCategoriaSerializer_post
-from baseApp.api.serializers import OrdenSerializer_get,OrdenSerializer_post
+from baseApp.api.serializers import OrdenSerializer_get, OrdenSerializer_post
 from baseApp.api.serializers import ProductoOrdenSerializer_get, ProductoOrdenSerializer_post
+
 
 class LocalComercialApiView(APIView):
     """
     List all LocalComercial, or create a new LocalComercial.
     """
+
     def get(self, request):
-        serializer = LocalComercialSerializer_get(LocalComercial.objects.all(), many=True)
+        serializer = LocalComercialSerializer_get(
+            LocalComercial.objects.all(), many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
-    
+
     def post(self, request):
         serializer = LocalComercialSerializer_post(data=request.POST)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+
 
 class LocalComercialApiView_Detail(APIView):
     """
     Retrieve, update or delete a LocalComercial instance.
     """
+
     def get(self, request, pk, format=None):
         try:
             locales = LocalComercial.objects.get(id=pk)
@@ -64,24 +69,28 @@ class LocalComercialApiView_Detail(APIView):
         local.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class VentaApiView(APIView):
     """
     List all Venta, or create a new Venta.
     """
+
     def get(self, request):
         serializer = VentaSerializer_get(Venta.objects.all(), many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
-    
+
     def post(self, request):
         serializer = VentaSerializer_post(data=request.POST)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+
 
 class VentaApiView_Detail(APIView):
     """
     Retrieve, update or delete a Venta instance.
     """
+
     def get(self, request, pk, format=None):
         try:
             venta = Venta.objects.get(id=pk)
@@ -109,24 +118,29 @@ class VentaApiView_Detail(APIView):
         local.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class ProductoVentaApiView(APIView):
     """
     List all ProductoVenta, or create a new ProductoVenta.
     """
+
     def get(self, request):
-        serializer = ProductoVentaSerializer_get(ProductoVenta.objects.all(), many=True)
+        serializer = ProductoVentaSerializer_get(
+            ProductoVenta.objects.all(), many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
-    
+
     def post(self, request):
         serializer = ProductoVentaSerializer_post(data=request.POST)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+
 
 class ProductoVentaApiView_Detail(APIView):
     """
     Retrieve, update or delete a ProductoVenta instance.
     """
+
     def get(self, request, pk, format=None):
         try:
             pv = ProductoVenta.objects.get(id=pk)
@@ -154,24 +168,29 @@ class ProductoVentaApiView_Detail(APIView):
         pv.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class CategoriaApiView(APIView):
     """
     List all Categoria, or create a new Categoria.
     """
+
     def get(self, request):
-        serializer = CategoriaSerializer_get(Categoria.objects.all(), many=True)
+        serializer = CategoriaSerializer_get(
+            Categoria.objects.all(), many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
-    
+
     def post(self, request):
         serializer = CategoriaSerializer_post(data=request.POST)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+
 
 class CategoriaApiView_Detail(APIView):
     """
     Retrieve, update or delete a Categoria instance.
     """
+
     def get(self, request, pk, format=None):
         try:
             cat = Categoria.objects.get(id=pk)
@@ -204,20 +223,24 @@ class ProductoCategoriaApiView(APIView):
     """
     List all ProductoCategoria, or create a new ProductoCategoria.
     """
+
     def get(self, request):
-        serializer = ProductoCategoriaSerializer_get(ProductoCategoria.objects.all(), many=True)
+        serializer = ProductoCategoriaSerializer_get(
+            ProductoCategoria.objects.all(), many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
-    
+
     def post(self, request):
         serializer = ProductoCategoriaSerializer_post(data=request.POST)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+
 
 class ProductoCategoriaApiView_Detail(APIView):
     """
     Retrieve, update or delete a ProductoCategoria instance.
     """
+
     def get(self, request, pk, format=None):
         try:
             prod = ProductoCategoria.objects.get(id=pk)
@@ -245,24 +268,28 @@ class ProductoCategoriaApiView_Detail(APIView):
         prod.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class OrdenApiView(APIView):
     """
     List all Orden, or create a new Orden.
     """
+
     def get(self, request):
         serializer = OrdenSerializer_get(Orden.objects.all(), many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
-    
+
     def post(self, request):
         serializer = OrdenSerializer_post(data=request.POST)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+
 
 class OrdenApiView_Detail(APIView):
     """
     Retrieve, update or delete a Orden instance.
     """
+
     def get(self, request, pk, format=None):
         try:
             orden = Orden.objects.get(id=pk)
@@ -290,24 +317,29 @@ class OrdenApiView_Detail(APIView):
         orden.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class ProductoOrdenApiView(APIView):
     """
     List all ProductoOrden, or create a new ProductoOrden.
     """
+
     def get(self, request):
-        serializer = ProductoOrdenSerializer_get(ProductoOrden.objects.all(), many=True)
+        serializer = ProductoOrdenSerializer_get(
+            ProductoOrden.objects.all(), many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
-    
+
     def post(self, request):
         serializer = ProductoOrdenSerializer_post(data=request.POST)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED,data=serializer.data)
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
+
 
 class ProductoOrdenApiView_Detail(APIView):
     """
     Retrieve, update or delete a ProductoOrden instance.
     """
+
     def get(self, request, pk, format=None):
         try:
             productoOrden = ProductoOrden.objects.get(id=pk)
