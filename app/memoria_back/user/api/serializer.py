@@ -1,8 +1,12 @@
 import email
 from rest_framework.serializers import ModelSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from user.models import User
 
+
+class CustomTokenObtairPairSerializer(TokenObtainPairSerializer):
+    pass
 
 class UserSerializer_post(ModelSerializer):
     nombre = serializers.CharField(required = True)
