@@ -1,3 +1,4 @@
+import email
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from user.models import User
@@ -13,10 +14,23 @@ class UserSerializer_post(ModelSerializer):
         fields = ['username', 'email', 'password',
                   'nombre', 'apellido', 'rol', 'telefono']
 
+    def create(self, validated_data):
+        user = User(
+            username= validated_data['username'],
+            email= validated_data['email'],
+            nombre= validated_data['nombre'],
+            apellido= validated_data['apellido'],
+            rol= validated_data['rol'],
+            telefono= validated_data['telefono']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+
 
 class UserSerializer_get(ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password',
+        fields = ['id','username', 'email', 'password',
                   'nombre', 'apellido', 'rol', 'telefono']
 
