@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,6 +20,8 @@ from baseApp.api.serializers import ProductoCategoriaSerializer_get, ProductoCat
 from baseApp.api.serializers import OrdenSerializer_get, OrdenSerializer_post
 from baseApp.api.serializers import ProductoOrdenSerializer_get, ProductoOrdenSerializer_post
 
+from baseApp.pagination import CustomPagination
+from rest_framework.pagination import LimitOffsetPagination
 
 class LocalComercialApiView(APIView):
     """
@@ -26,8 +29,10 @@ class LocalComercialApiView(APIView):
     """
 
     def get(self, request):
-        serializer = LocalComercialSerializer_get(
-            LocalComercial.objects.all(), many=True)
+        locales = LocalComercial.objects.all()
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(locales,request)
+        serializer = LocalComercialSerializer_get(result_page, many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
     def post(self, request):
@@ -47,7 +52,7 @@ class LocalComercialApiView_Detail(APIView):
             locales = LocalComercial.objects.get(id=pk)
         except LocalComercial.DoesNotExist:
             raise Http404
-        serializer = LocalComercialSerializer_get(locales, many=True)
+        serializer = LocalComercialSerializer_get(locales)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -169,15 +174,24 @@ class ProductoVentaApiView_Detail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CategoriaApiView(APIView):
+class CategoriaApiView(APIView, LimitOffsetPagination):
     """
     List all Categoria, or create a new Categoria.
     """
-
     def get(self, request):
-        serializer = CategoriaSerializer_get(
-            Categoria.objects.all(), many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        queryset = Categoria.objects.all()
+        refLocalComercial = request.query_params.get('refLocalComercial')
+        esNuevo = request.query_params.get('esNuevo')
+
+        if refLocalComercial is not None:
+            queryset = queryset.filter(refLocalComercial=refLocalComercial)
+        
+        if esNuevo is not None:
+            queryset = queryset.filter(esNuevo=esNuevo)
+        
+        results = self.paginate_queryset(queryset,request)
+        serializer = CategoriaSerializer_get(results, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = CategoriaSerializer_post(data=request.POST)
@@ -219,15 +233,21 @@ class CategoriaApiView_Detail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ProductoCategoriaApiView(APIView):
+class ProductoCategoriaApiView(APIView, LimitOffsetPagination):
     """
     List all ProductoCategoria, or create a new ProductoCategoria.
     """
 
     def get(self, request):
-        serializer = ProductoCategoriaSerializer_get(
-            ProductoCategoria.objects.all(), many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        queryset = ProductoCategoria.objects.all()
+        refCategoria = request.query_params.get('refCategoria')
+
+        if refCategoria is not None:
+            queryset = queryset.filter(refCategoria=refCategoria)
+        
+        results = self.paginate_queryset(queryset,request)
+        serializer = ProductoCategoriaSerializer_get(results, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = ProductoCategoriaSerializer_post(data=request.POST)

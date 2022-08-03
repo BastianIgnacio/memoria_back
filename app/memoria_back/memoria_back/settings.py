@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -54,9 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
-
 CORS_ORIGIN_ALLOW_ALL = True
-
 ROOT_URLCONF = 'memoria_back.urls'
 
 TEMPLATES = [
@@ -107,10 +106,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-EST_FRAMEWORK = {
+REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
 }
 
 # Internationalization
@@ -129,7 +130,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
+MEDIA_URL = '/archivos/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'archivos')
 STATIC_ROOT =  './static/'
 
 AUTH_USER_MODEL = 'user.User'

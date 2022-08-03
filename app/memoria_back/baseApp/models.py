@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from tkinter import CASCADE
 from django.db import models
 import datetime
@@ -39,6 +40,7 @@ class Categoria(models.Model):
     descripcion = models.TextField()
     esVisible = models.BooleanField(default=False)
     esNuevo = models.BooleanField(default=True)
+    imagen = models.ImageField(blank='',default="",upload_to='fotos/categorias')
     refLocalComercial = models.ForeignKey(LocalComercial,on_delete=models.CASCADE,default=1)
 
 """ Clase ProductoCategoria representa un PRODUCTO de una CATEGORIA de una tienda virtual """
@@ -48,7 +50,9 @@ class ProductoCategoria(models.Model):
     esVisible = models.BooleanField(default=False)
     esNuevo = models.BooleanField(default=True)
     isBestProduct = models.BooleanField(default=False)
+    imagen = models.ImageField(blank='',default="",upload_to='fotos/productos')
     refCategoria = models.ForeignKey(Categoria,on_delete=models.CASCADE,default=1)
+    precio = models.IntegerField(default=0)
 
 
 """Clase Orden representa una ORDEN que se le ha realizado a una tienda virtual"""
