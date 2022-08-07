@@ -2,3 +2,7 @@
 entornosVirtuales/
 
 app/memoria_back/db.sqlite3
+
+app/memoria_back/archivos/fotos/categorias/
+
+app/memoria_back/archivos/fotos/productos/

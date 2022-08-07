@@ -1,5 +1,6 @@
 from dataclasses import fields
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
 from baseApp.models import LocalComercial
 from baseApp.models import Venta
@@ -45,16 +46,23 @@ class CategoriaSerializer_post(ModelSerializer):
     class Meta:
         model = Categoria
         fields= '__all__'
+
+class CategoriaSerializer_put(ModelSerializer):
+    imagen = Base64ImageField(required=False)
+    class Meta:
+        model = Categoria
+        fields= ['nombre','descripcion','esVisible','esNuevo','imagen']
+    
 class CategoriaSerializer_get(ModelSerializer):
     class Meta:
         model = Categoria
         fields= '__all__'
 
 class ProductoCategoriaSerializer_post(ModelSerializer):
-    imagen = Base64ImageField()
+    imagen = Base64ImageField(required=False)
     class Meta:
         model = ProductoCategoria
-        fields= '__all__'
+        fields= ['nombre','descripcion','esVisible','esNuevo','isBestProduct','imagen']
 class ProductoCategoriaSerializer_get(ModelSerializer):
     class Meta:
         model = ProductoCategoria

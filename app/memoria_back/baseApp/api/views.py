@@ -15,7 +15,7 @@ from baseApp.models import ProductoOrden
 from baseApp.api.serializers import LocalComercialSerializer_get, LocalComercialSerializer_post
 from baseApp.api.serializers import VentaSerializer_get, VentaSerializer_post
 from baseApp.api.serializers import ProductoVentaSerializer_get, ProductoVentaSerializer_post
-from baseApp.api.serializers import CategoriaSerializer_get, CategoriaSerializer_post
+from baseApp.api.serializers import CategoriaSerializer_get, CategoriaSerializer_post, CategoriaSerializer_put
 from baseApp.api.serializers import ProductoCategoriaSerializer_get, ProductoCategoriaSerializer_post
 from baseApp.api.serializers import OrdenSerializer_get, OrdenSerializer_post
 from baseApp.api.serializers import ProductoOrdenSerializer_get, ProductoOrdenSerializer_post
@@ -194,7 +194,7 @@ class CategoriaApiView(APIView, LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
-        serializer = CategoriaSerializer_post(data=request.POST)
+        serializer = CategoriaSerializer_post(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
@@ -218,7 +218,7 @@ class CategoriaApiView_Detail(APIView):
             put = Categoria.objects.get(id=pk)
         except Categoria.DoesNotExist:
             raise Http404
-        serializer = CategoriaSerializer_post(put, data=request.data)
+        serializer = CategoriaSerializer_put(put, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -250,7 +250,7 @@ class ProductoCategoriaApiView(APIView, LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
-        serializer = ProductoCategoriaSerializer_post(data=request.POST)
+        serializer = ProductoCategoriaSerializer_post(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
