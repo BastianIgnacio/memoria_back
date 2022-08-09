@@ -31,7 +31,6 @@ class ProductoVenta(models.Model):
     precioUnitario = models.IntegerField()
     nombreProducto = models.CharField(max_length=255)
     descripcionProducto = models.TextField()
-    notaEspecial = models.TextField()
     refVenta = models.ForeignKey(Venta,on_delete=models.CASCADE,default=1)
 
 """ Clase Categoria representa una CATEGORIA de una tienda virtual """
@@ -59,6 +58,7 @@ class ProductoCategoria(models.Model):
 class Orden(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     tipoEntrega = models.CharField(max_length=50)
+    entregaDelivery = models.BooleanField(default=False)
     estado = models.CharField(max_length=50)
     direccionEntrega = models.TextField()
     telefonoEntrega = models.CharField(max_length=50)

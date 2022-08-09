@@ -1,7 +1,9 @@
+from msilib.schema import Feature
 from django.conf import settings
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from datetime import date, datetime
 from django.http import Http404
 
 from baseApp.models import LocalComercial
@@ -75,14 +77,29 @@ class LocalComercialApiView_Detail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class VentaApiView(APIView):
+class VentaApiView(APIView, LimitOffsetPagination):
     """
     List all Venta, or create a new Venta.
     """
 
     def get(self, request):
-        serializer = VentaSerializer_get(Venta.objects.all(), many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        queryset = Venta.objects.all()
+        refLocalComercial = request.query_params.get('refLocalComercial')
+        fecha = request.query_params.get('fecha')
+
+        if refLocalComercial is not None:
+            queryset = queryset.filter(refLocalComercial=refLocalComercial)
+        
+        if fecha is not None:
+            fecha_dateTime = datetime.strptime(fecha,'%Y-%m-%d')
+            year = fecha_dateTime.year
+            month = fecha_dateTime.month
+            day = fecha_dateTime.day
+            queryset = queryset.filter(fecha__year=year, fecha__month= month, fecha__day=day)
+        
+        results = self.paginate_queryset(queryset,request)
+        serializer = VentaSerializer_get(results, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = VentaSerializer_post(data=request.POST)
@@ -124,16 +141,21 @@ class VentaApiView_Detail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ProductoVentaApiView(APIView):
+class ProductoVentaApiView(APIView, LimitOffsetPagination):
     """
     List all ProductoVenta, or create a new ProductoVenta.
     """
 
     def get(self, request):
-        serializer = ProductoVentaSerializer_get(
-            ProductoVenta.objects.all(), many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        queryset = ProductoVenta.objects.all()
+        refVenta = request.query_params.get('refVenta')
 
+        if refVenta is not None:
+            queryset = queryset.filter(refVenta=refVenta)
+        
+        results = self.paginate_queryset(queryset,request)
+        serializer = ProductoVentaSerializer_get(results, many=True)
+        return self.get_paginated_response(serializer.data)
     def post(self, request):
         serializer = ProductoVentaSerializer_post(data=request.POST)
         serializer.is_valid(raise_exception=True)
@@ -289,14 +311,21 @@ class ProductoCategoriaApiView_Detail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class OrdenApiView(APIView):
+class OrdenApiView(APIView, LimitOffsetPagination):
     """
     List all Orden, or create a new Orden.
     """
 
     def get(self, request):
-        serializer = OrdenSerializer_get(Orden.objects.all(), many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        queryset = Orden.objects.all()
+        refVenta = request.query_params.get('refVenta')
+
+        if refVenta is not None:
+            queryset = queryset.filter(refVenta=refVenta)
+        
+        results = self.paginate_queryset(queryset,request)
+        serializer = OrdenSerializer_get(results, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = OrdenSerializer_post(data=request.POST)
@@ -338,15 +367,21 @@ class OrdenApiView_Detail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ProductoOrdenApiView(APIView):
+class ProductoOrdenApiView(APIView, LimitOffsetPagination):
     """
     List all ProductoOrden, or create a new ProductoOrden.
     """
 
     def get(self, request):
-        serializer = ProductoOrdenSerializer_get(
-            ProductoOrden.objects.all(), many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        queryset = ProductoOrden.objects.all()
+        refOrden = request.query_params.get('refOrden')
+
+        if refOrden is not None:
+            queryset = queryset.filter(refOrden=refOrden)
+        
+        results = self.paginate_queryset(queryset,request)
+        serializer = ProductoOrdenSerializer_get(results, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = ProductoOrdenSerializer_post(data=request.POST)

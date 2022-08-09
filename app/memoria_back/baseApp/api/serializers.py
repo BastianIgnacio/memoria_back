@@ -1,6 +1,7 @@
 from dataclasses import fields
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
+import pytz
 from drf_extra_fields.fields import Base64ImageField
 from baseApp.models import LocalComercial
 from baseApp.models import Venta
@@ -28,6 +29,7 @@ class VentaSerializer_get(ModelSerializer):
         model = Venta
         fields= '__all__'
 class VentaSerializer_post(ModelSerializer):
+    fecha = serializers.DateTimeField(default_timezone=pytz.timezone('America/Santiago'), required=False)
     class Meta:
         model = Venta
         fields= '__all__'
@@ -35,11 +37,11 @@ class VentaSerializer_post(ModelSerializer):
 class ProductoVentaSerializer_get(ModelSerializer):
     class Meta:
         model = ProductoVenta
-        fields = ['id','refVenta','total','cantidad','precioUnitario','nombreProducto','descripcionProducto','notaEspecial']
+        fields = ['id','refVenta','total','cantidad','precioUnitario','nombreProducto','descripcionProducto']
 class ProductoVentaSerializer_post(ModelSerializer):
     class Meta:
         model = ProductoVenta
-        fields = ['id','total','cantidad','precioUnitario','nombreProducto','descripcionProducto','notaEspecial']
+        fields = ['id','total','cantidad','precioUnitario','nombreProducto','descripcionProducto']
 
 class CategoriaSerializer_post(ModelSerializer):
     imagen = Base64ImageField()
