@@ -319,9 +319,17 @@ class OrdenApiView(APIView, LimitOffsetPagination):
     def get(self, request):
         queryset = Orden.objects.all()
         refVenta = request.query_params.get('refVenta')
+        refLocalComercial = request.query_params.get('refLocalComercial')
+        estado = request.query_params.get('estado')
 
         if refVenta is not None:
             queryset = queryset.filter(refVenta=refVenta)
+        
+        if refLocalComercial is not None:
+            queryset = queryset.filter(refLocalComercial=refLocalComercial)
+        
+        if estado is not None:
+            queryset = queryset.filter(estado=estado)
         
         results = self.paginate_queryset(queryset,request)
         serializer = OrdenSerializer_get(results, many=True)
