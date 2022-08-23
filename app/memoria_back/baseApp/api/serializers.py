@@ -16,8 +16,9 @@ from baseApp.models import ProductoOrden
 class LocalComercialSerializer_get(ModelSerializer):
     class Meta:
         model = LocalComercial
-        fields = ['id','nombre','direccion','link','horarioAtencion','tieneDelivery','estado',
-        'tieneMercadopago']  
+        fields = ['id','nombre','direccion','link','horarioAtencion','tieneRetiroLocal','tieneDelivery','estado',
+        'tieneMercadopago','pagoRetiroLocalEfectivo','pagoRetiroLocalPos','pagoRetiroLocalMercadopago',
+        'pagoDeliveryEfectivo','pagoDeliveryPos','pagoDeliveryMercadopago']  
 class LocalComercialSerializer_post(ModelSerializer):
     class Meta:
         model = LocalComercial
@@ -41,7 +42,7 @@ class ProductoVentaSerializer_get(ModelSerializer):
 class ProductoVentaSerializer_post(ModelSerializer):
     class Meta:
         model = ProductoVenta
-        fields = ['id','total','cantidad','precioUnitario','nombreProducto','descripcionProducto']
+        fields = ['id','total','cantidad','precioUnitario','nombreProducto','descripcionProducto','refVenta']
 
 class CategoriaSerializer_post(ModelSerializer):
     imagen = Base64ImageField()

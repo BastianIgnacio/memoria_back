@@ -1,5 +1,6 @@
 from distutils.command.upload import upload
 from tkinter import CASCADE
+from unittest.mock import DEFAULT
 from django.db import models
 import datetime
 
@@ -11,15 +12,24 @@ class LocalComercial(models.Model):
     link = models.CharField(max_length=255)
     horarioAtencion = models.TextField()
     tieneDelivery = models.BooleanField(default=False)
+    tieneRetiroLocal = models.BooleanField(default=False)
     estado = models.CharField(max_length=20)
     privateKeyMercadopago = models.CharField(max_length=25)
     publicKeyMercadopago = models.CharField(max_length=25)
     tieneMercadopago = models.BooleanField(default=False)
+    pagoRetiroLocalEfectivo = models.BooleanField(default=False);
+    pagoRetiroLocalPos = models.BooleanField(default=False);
+    pagoRetiroLocalMercadopago = models.BooleanField(default=False);
+    pagoDeliveryEfectivo = models.BooleanField(default=False);
+    pagoDeliveryPos = models.BooleanField(default=False);
+    pagoDeliveryMercadopago = models.BooleanField(default=False);
 
 """ Clase Venta representa una venta de una tienda virtual """
 class Venta(models.Model):
     total = models.IntegerField()
     tipoPago = models.CharField(max_length=50)
+    estadoPago = models.CharField(max_length=50, default='NO_PAGADO')
+    estadoVenta = models.CharField(max_length=50, default='FINALIZADA')
     fecha = models.DateTimeField(auto_now_add=True)
     refLocalComercial = models.ForeignKey(LocalComercial,on_delete=models.CASCADE,default=1)
 
@@ -65,6 +75,7 @@ class Orden(models.Model):
     nombrePedido = models.CharField(max_length=50)
     precioEnvio = models.IntegerField()
     total = models.IntegerField()
+    tiempoEntrega = models.CharField(max_length=255, default='Lo antes posible')
     refLocalComercial = models.ForeignKey(LocalComercial,on_delete=models.CASCADE,default=1)
     refVenta = models.ForeignKey(Venta,on_delete=models.CASCADE,default=1)
 

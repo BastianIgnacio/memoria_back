@@ -1,4 +1,5 @@
 from msilib.schema import Feature
+from coreapi import Link
 from django.conf import settings
 from rest_framework import status
 from rest_framework.views import APIView
@@ -25,18 +26,22 @@ from baseApp.api.serializers import ProductoOrdenSerializer_get, ProductoOrdenSe
 from baseApp.pagination import CustomPagination
 from rest_framework.pagination import LimitOffsetPagination
 
-class LocalComercialApiView(APIView):
+class LocalComercialApiView(APIView, LimitOffsetPagination):
     """
     List all LocalComercial, or create a new LocalComercial.
     """
 
     def get(self, request):
-        locales = LocalComercial.objects.all()
-        paginator = CustomPagination()
-        result_page = paginator.paginate_queryset(locales,request)
-        serializer = LocalComercialSerializer_get(result_page, many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        queryset = LocalComercial.objects.all()
+        link = request.query_params.get('link')
 
+        if link is not None:
+           queryset = queryset.filter(link=link)
+        
+        results = self.paginate_queryset(queryset,request)
+        serializer = LocalComercialSerializer_get(results, many=True)
+        return self.get_paginated_response(serializer.data)
+    
     def post(self, request):
         serializer = LocalComercialSerializer_post(data=request.POST)
         serializer.is_valid(raise_exception=True)
@@ -102,7 +107,7 @@ class VentaApiView(APIView, LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
-        serializer = VentaSerializer_post(data=request.POST)
+        serializer = VentaSerializer_post(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
@@ -157,7 +162,7 @@ class ProductoVentaApiView(APIView, LimitOffsetPagination):
         serializer = ProductoVentaSerializer_get(results, many=True)
         return self.get_paginated_response(serializer.data)
     def post(self, request):
-        serializer = ProductoVentaSerializer_post(data=request.POST)
+        serializer = ProductoVentaSerializer_post(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
@@ -336,7 +341,7 @@ class OrdenApiView(APIView, LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
-        serializer = OrdenSerializer_post(data=request.POST)
+        serializer = OrdenSerializer_post(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
@@ -392,7 +397,7 @@ class ProductoOrdenApiView(APIView, LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
-        serializer = ProductoOrdenSerializer_post(data=request.POST)
+        serializer = ProductoOrdenSerializer_post(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
