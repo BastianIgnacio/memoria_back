@@ -72,6 +72,7 @@ class Orden(models.Model):
     estado = models.CharField(max_length=50)
     direccionEntrega = models.TextField()
     telefonoEntrega = models.CharField(max_length=50)
+    emailEntrega = models.EmailField(default='default@default.com')
     nombrePedido = models.CharField(max_length=50)
     precioEnvio = models.IntegerField()
     total = models.IntegerField()
