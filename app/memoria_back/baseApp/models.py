@@ -2,6 +2,7 @@ from distutils.command.upload import upload
 from tkinter import CASCADE
 from unittest.mock import DEFAULT
 from django.db import models
+from user.models import User
 import datetime
 
 # Create your models here.
@@ -9,11 +10,12 @@ import datetime
 class LocalComercial(models.Model):
     nombre = models.CharField(max_length=255)
     direccion = models.TextField()
-    link = models.CharField(max_length=255)
+    link = models.CharField(max_length=64, unique=True)
     horarioAtencion = models.TextField()
     tieneDelivery = models.BooleanField(default=False)
     tieneRetiroLocal = models.BooleanField(default=False)
     estado = models.CharField(max_length=20)
+    abierto = models.BooleanField(default=False)
     privateKeyMercadopago = models.CharField(max_length=25)
     publicKeyMercadopago = models.CharField(max_length=25)
     tieneMercadopago = models.BooleanField(default=False)
@@ -23,6 +25,8 @@ class LocalComercial(models.Model):
     pagoDeliveryEfectivo = models.BooleanField(default=False);
     pagoDeliveryPos = models.BooleanField(default=False);
     pagoDeliveryMercadopago = models.BooleanField(default=False);
+    imagen = models.ImageField(blank='',default="",upload_to='fotos/localesComerciales')
+    habilitado = models.BooleanField(default=False);
 
 """ Clase Venta representa una venta de una tienda virtual """
 class Venta(models.Model):

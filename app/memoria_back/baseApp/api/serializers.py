@@ -18,12 +18,23 @@ class LocalComercialSerializer_get(ModelSerializer):
         model = LocalComercial
         fields = ['id','nombre','direccion','link','horarioAtencion','tieneRetiroLocal','tieneDelivery','estado',
         'tieneMercadopago','pagoRetiroLocalEfectivo','pagoRetiroLocalPos','pagoRetiroLocalMercadopago',
-        'pagoDeliveryEfectivo','pagoDeliveryPos','pagoDeliveryMercadopago']  
+        'pagoDeliveryEfectivo','pagoDeliveryPos','pagoDeliveryMercadopago','habilitado','imagen']  
 class LocalComercialSerializer_post(ModelSerializer):
+    imagen = Base64ImageField()
     class Meta:
         model = LocalComercial
         fields = ['id','nombre','direccion','link','horarioAtencion','tieneDelivery','estado','publicKeyMercadopago',
-        'privateKeyMercadopago','tieneMercadopago']
+        'privateKeyMercadopago','tieneMercadopago','imagen','abierto']
+
+class LocalComercialSerializer_put(ModelSerializer):
+    imagen = Base64ImageField(required=False)
+    tieneMercadopago = serializers.BooleanField(required = False)
+    publicKeyMercadopago = serializers.CharField(required = False)
+    privateKeyMercadopago = serializers.CharField(required = False)
+    class Meta:
+        model = LocalComercial
+        fields = ['id','nombre','direccion','link','horarioAtencion','tieneDelivery','estado','abierto','imagen','habilitado', 'publicKeyMercadopago'
+        , 'privateKeyMercadopago', 'tieneMercadopago']
 
 class VentaSerializer_get(ModelSerializer):
     class Meta:

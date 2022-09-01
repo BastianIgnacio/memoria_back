@@ -15,7 +15,7 @@ from baseApp.models import ProductoCategoria
 from baseApp.models import Orden
 from baseApp.models import ProductoOrden
 
-from baseApp.api.serializers import LocalComercialSerializer_get, LocalComercialSerializer_post
+from baseApp.api.serializers import LocalComercialSerializer_get, LocalComercialSerializer_post, LocalComercialSerializer_put
 from baseApp.api.serializers import VentaSerializer_get, VentaSerializer_post
 from baseApp.api.serializers import ProductoVentaSerializer_get, ProductoVentaSerializer_post
 from baseApp.api.serializers import CategoriaSerializer_get, CategoriaSerializer_post, CategoriaSerializer_put
@@ -23,7 +23,6 @@ from baseApp.api.serializers import ProductoCategoriaSerializer_get, ProductoCat
 from baseApp.api.serializers import OrdenSerializer_get, OrdenSerializer_post
 from baseApp.api.serializers import ProductoOrdenSerializer_get, ProductoOrdenSerializer_post
 
-from baseApp.pagination import CustomPagination
 from rest_framework.pagination import LimitOffsetPagination
 
 class LocalComercialApiView(APIView, LimitOffsetPagination):
@@ -67,7 +66,7 @@ class LocalComercialApiView_Detail(APIView):
             put = LocalComercial.objects.get(id=pk)
         except LocalComercial.DoesNotExist:
             raise Http404
-        serializer = LocalComercialSerializer_post(put, data=request.data)
+        serializer = LocalComercialSerializer_put(put, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

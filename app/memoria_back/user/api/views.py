@@ -7,12 +7,13 @@ from django.http import Http404
 from django.contrib.auth import authenticate
 
 from user.models import User
-from user.api.serializer import UserSerializer_post, UserSerializer_get
+from user.api.serializer import UserSerializer_post, UserSerializer_get, UserSerializer_put
 
 from rest_framework_simplejwt.views import TokenObtainPairView 
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from user.api.serializer import CustomTokenObtairPairSerializer
+from rest_framework.pagination import LimitOffsetPagination
 
 class Login(TokenObtainPairView):
     serializer_class = CustomTokenObtairPairSerializer
@@ -47,14 +48,22 @@ class Logout(GenericAPIView):
 
 
 
-class UserApiView(APIView):
+class UserApiView(APIView, LimitOffsetPagination):
     """
     List all LocalComercial, or create a new LocalComercial.
     """
 
     def get(self, request):
-        serializer = UserSerializer_get(User.objects.all(), many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        queryset = User.objects.all()
+        refLocalComercial = request.query_params.get('refLocalComercial')
+        print(refLocalComercial)
+
+        if refLocalComercial is not None:
+           queryset = queryset.filter(refTienda=refLocalComercial)
+        
+        results = self.paginate_queryset(queryset,request)
+        serializer = UserSerializer_get(results, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = UserSerializer_post(data=request.POST,required=True)
@@ -78,10 +87,10 @@ class UserApiView_Detail(APIView):
 
     def put(self, request, pk, format=None):
         try:
-            put = User.objects.get(id=pk)
+            put = User.objects.get(refTienda=pk)
         except User.DoesNotExist:
             raise Http404
-        serializer = UserSerializer_post(put, data=request.data)
+        serializer = UserSerializer_put(put, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
