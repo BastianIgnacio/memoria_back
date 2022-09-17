@@ -27,13 +27,15 @@ class LocalComercial(models.Model):
     pagoDeliveryMercadopago = models.BooleanField(default=False);
     imagen = models.ImageField(blank='',default="",upload_to='fotos/localesComerciales')
     habilitado = models.BooleanField(default=False);
+    region = models.CharField(max_length=30, default="SIN REGIÓN")
+    comuna = models.CharField(max_length=30, default="SIN COMUNA")
 
 """ Clase Venta representa una venta de una tienda virtual """
 class Venta(models.Model):
     total = models.IntegerField()
     tipoPago = models.CharField(max_length=50)
     estadoPago = models.CharField(max_length=50, default='NO_PAGADO')
-    estadoVenta = models.CharField(max_length=50, default='FINALIZADA')
+    estadoVenta = models.CharField(max_length=50, default='EN_PROCESO')
     fecha = models.DateTimeField(auto_now_add=True)
     refLocalComercial = models.ForeignKey(LocalComercial,on_delete=models.CASCADE,default=1)
 

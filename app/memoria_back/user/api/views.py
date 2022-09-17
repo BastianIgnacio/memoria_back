@@ -56,17 +56,20 @@ class UserApiView(APIView, LimitOffsetPagination):
     def get(self, request):
         queryset = User.objects.all()
         refLocalComercial = request.query_params.get('refLocalComercial')
-        print(refLocalComercial)
+        email = request.query_params.get('email')
 
         if refLocalComercial is not None:
            queryset = queryset.filter(refTienda=refLocalComercial)
+
+        if email is not None:
+           queryset = queryset.filter(email=email)
         
         results = self.paginate_queryset(queryset,request)
         serializer = UserSerializer_get(results, many=True)
         return self.get_paginated_response(serializer.data)
 
     def post(self, request):
-        serializer = UserSerializer_post(data=request.POST,required=True)
+        serializer = UserSerializer_post(data=request.data,required=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)

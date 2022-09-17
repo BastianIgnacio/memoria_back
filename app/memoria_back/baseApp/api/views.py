@@ -42,7 +42,7 @@ class LocalComercialApiView(APIView, LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
     
     def post(self, request):
-        serializer = LocalComercialSerializer_post(data=request.POST)
+        serializer = LocalComercialSerializer_post(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)

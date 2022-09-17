@@ -13,21 +13,25 @@ class UserSerializer_post(ModelSerializer):
     apellido = serializers.CharField(required = True)
     rol = serializers.CharField(required = True)
     telefono = serializers.CharField(required = True)
+    username= serializers.CharField(required = False)
     class Meta:
         model = User
         fields = ['username', 'email', 'password',
-                  'nombre', 'apellido', 'rol', 'telefono']
+                  'nombre', 'apellido', 'rol', 'telefono','refTienda']
 
     def create(self, validated_data):
         user = User(
-            username= validated_data['username'],
             email= validated_data['email'],
             nombre= validated_data['nombre'],
             apellido= validated_data['apellido'],
             rol= validated_data['rol'],
-            telefono= validated_data['telefono']
+            telefono= validated_data['telefono'],
+            refTienda= validated_data['refTienda']
         )
         user.set_password(validated_data['password'])
+        user.username= "usuarioAdd"
+        user.save()
+        user.username = "username_" + str(user.id)
         user.save()
         return user
 
