@@ -18,13 +18,16 @@ class LocalComercialSerializer_get(ModelSerializer):
         model = LocalComercial
         fields = ['id','nombre','direccion','link','horarioAtencion','tieneRetiroLocal','tieneDelivery','estado',
         'tieneMercadopago','pagoRetiroLocalEfectivo','pagoRetiroLocalPos','pagoRetiroLocalMercadopago',
-        'pagoDeliveryEfectivo','pagoDeliveryPos','pagoDeliveryMercadopago','habilitado','imagen']  
+        'pagoDeliveryEfectivo','pagoDeliveryPos','pagoDeliveryMercadopago','habilitado','imagen','telefono','publicKeyMercadopago','privateKeyMercadopago',
+        'region','comuna']  
 class LocalComercialSerializer_post(ModelSerializer):
     imagen = Base64ImageField(required=False)
     class Meta:
         model = LocalComercial
-        fields = ['id','nombre','direccion','link','horarioAtencion','tieneDelivery','estado','publicKeyMercadopago',
-        'privateKeyMercadopago','tieneMercadopago','imagen','abierto']
+        fields = ['id','nombre','direccion','link','horarioAtencion','tieneRetiroLocal','tieneDelivery','estado',
+        'tieneMercadopago','pagoRetiroLocalEfectivo','pagoRetiroLocalPos','pagoRetiroLocalMercadopago',
+        'pagoDeliveryEfectivo','pagoDeliveryPos','pagoDeliveryMercadopago','habilitado','imagen','telefono','publicKeyMercadopago','privateKeyMercadopago',
+        'region','comuna'] 
 
 class LocalComercialSerializer_put(ModelSerializer):
     imagen = Base64ImageField(required=False)
@@ -33,8 +36,10 @@ class LocalComercialSerializer_put(ModelSerializer):
     privateKeyMercadopago = serializers.CharField(required = False)
     class Meta:
         model = LocalComercial
-        fields = ['id','nombre','direccion','link','horarioAtencion','tieneDelivery','estado','abierto','imagen','habilitado', 'publicKeyMercadopago'
-        , 'privateKeyMercadopago', 'tieneMercadopago']
+        fields = ['id','nombre','direccion','link','horarioAtencion','tieneRetiroLocal','tieneDelivery','estado',
+        'tieneMercadopago','pagoRetiroLocalEfectivo','pagoRetiroLocalPos','pagoRetiroLocalMercadopago',
+        'pagoDeliveryEfectivo','pagoDeliveryPos','pagoDeliveryMercadopago','habilitado','imagen','telefono','publicKeyMercadopago','privateKeyMercadopago',
+        'region','comuna'] 
 
 class VentaSerializer_get(ModelSerializer):
     class Meta:

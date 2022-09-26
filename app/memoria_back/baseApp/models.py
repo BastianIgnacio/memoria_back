@@ -4,6 +4,7 @@ from unittest.mock import DEFAULT
 from django.db import models
 from user.models import User
 import datetime
+from PIL import Image
 
 # Create your models here.
 """ Clase LocalComercial representa una tienda virtual"""
@@ -27,8 +28,9 @@ class LocalComercial(models.Model):
     pagoDeliveryMercadopago = models.BooleanField(default=False);
     imagen = models.ImageField(blank='',default="",upload_to='fotos/localesComerciales')
     habilitado = models.BooleanField(default=False);
-    region = models.CharField(max_length=30, default="SIN REGIÓN")
-    comuna = models.CharField(max_length=30, default="SIN COMUNA")
+    region = models.CharField(max_length=50, default="SIN REGIÓN")
+    comuna = models.CharField(max_length=50, default="SIN COMUNA")
+    telefono = models.CharField(max_length=12, default="+569XXXXXXX")
 
 """ Clase Venta representa una venta de una tienda virtual """
 class Venta(models.Model):
@@ -58,6 +60,15 @@ class Categoria(models.Model):
     imagen = models.ImageField(blank='',default="",upload_to='fotos/categorias')
     refLocalComercial = models.ForeignKey(LocalComercial,on_delete=models.CASCADE,default=1)
 
+    def save(self,*args,**kwargs):
+        super().save(*args,**kwargs)
+        img = Image.open(self.imagen.path)
+
+        if img.height > 400 or img.width > 400:
+            output_size = (400,400)
+            img.thumbnail(output_size)
+            img.save(self.imagen.path)
+
 """ Clase ProductoCategoria representa un PRODUCTO de una CATEGORIA de una tienda virtual """
 class ProductoCategoria(models.Model):
     nombre = models.CharField(max_length=255)
@@ -68,6 +79,15 @@ class ProductoCategoria(models.Model):
     imagen = models.ImageField(blank='',default="",upload_to='fotos/productos')
     refCategoria = models.ForeignKey(Categoria,on_delete=models.CASCADE,default=1)
     precio = models.IntegerField(default=0)
+
+    def save(self,*args,**kwargs):
+        super().save(*args,**kwargs)
+        img = Image.open(self.imagen.path)
+
+        if img.height > 400 or img.width > 400:
+            output_size = (400,400)
+            img.thumbnail(output_size)
+            img.save(self.imagen.path)
 
 
 """Clase Orden representa una ORDEN que se le ha realizado a una tienda virtual"""
