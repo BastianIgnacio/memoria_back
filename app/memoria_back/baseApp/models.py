@@ -17,8 +17,8 @@ class LocalComercial(models.Model):
     tieneRetiroLocal = models.BooleanField(default=False)
     estado = models.CharField(max_length=20)
     abierto = models.BooleanField(default=False)
-    privateKeyMercadopago = models.CharField(max_length=25)
-    publicKeyMercadopago = models.CharField(max_length=25)
+    privateKeyMercadopago = models.CharField(max_length=50)
+    publicKeyMercadopago = models.CharField(max_length=50)
     tieneMercadopago = models.BooleanField(default=False)
     pagoRetiroLocalEfectivo = models.BooleanField(default=False);
     pagoRetiroLocalPos = models.BooleanField(default=False);
