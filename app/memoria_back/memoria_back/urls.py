@@ -21,6 +21,9 @@ from baseApp.api.views import ProductoCategoriaApiView, ProductoCategoriaApiView
 from baseApp.api.views import OrdenApiView, OrdenApiView_Detail
 from baseApp.api.views import ProductoOrdenApiView, ProductoOrdenApiView_Detail
 
+# Aca tenemos el endpoint para los Mejores Productos
+from baseApp.api.views import ProductoCategoriaMejoresProductos
+
 from django.contrib import admin
 from django.urls import path, include
 
@@ -71,6 +74,8 @@ urlpatterns = [
     path('api/productoCategorias/',ProductoCategoriaApiView.as_view()),
     path('api/productoCategorias/<int:pk>/',ProductoCategoriaApiView_Detail.as_view()),
 
+    #Ruta pára MejoresProductos
+    path('api/productoCategoriaMejoresProductos/',ProductoCategoriaMejoresProductos.as_view()),
     #Rutas para Orden
     path('api/ordens/',OrdenApiView.as_view()),
     path('api/ordens/<int:pk>/',OrdenApiView_Detail.as_view()),

@@ -19,7 +19,7 @@ class LocalComercialSerializer_get(ModelSerializer):
         fields = ['id','nombre','direccion','link','horarioAtencion','tieneRetiroLocal','tieneDelivery','estado',
         'tieneMercadopago','pagoRetiroLocalEfectivo','pagoRetiroLocalPos','pagoRetiroLocalMercadopago',
         'pagoDeliveryEfectivo','pagoDeliveryPos','pagoDeliveryMercadopago','habilitado','imagen','telefono','publicKeyMercadopago','privateKeyMercadopago',
-        'region','comuna']  
+        'region','comuna','abierto']  
 class LocalComercialSerializer_post(ModelSerializer):
     imagen = Base64ImageField(required=False)
     class Meta:

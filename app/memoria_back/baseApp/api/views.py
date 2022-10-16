@@ -281,6 +281,34 @@ class ProductoCategoriaApiView(APIView, LimitOffsetPagination):
         serializer.save()
         return Response(status=status.HTTP_201_CREATED, data=serializer.data)
 
+class ProductoCategoriaMejoresProductos(APIView, LimitOffsetPagination):
+    """
+    List all ProductoCategoria.
+    """
+    def get(self, request):
+        mejoresProductosArray = []
+        #Ahora debemos filtrarlo por local comercial
+        refLocalComercial = request.query_params.get('refLocalComercial')
+        if refLocalComercial is not None:
+            queryCategorias = Categoria.objects.all()
+            queryCategorias = queryCategorias.filter(refLocalComercial=refLocalComercial)
+
+            queryProductos = ProductoCategoria.objects.all()
+
+            # Tenemos las categorias de un local comercial en la variable queryCategorias
+            for x in queryCategorias:
+                productosCatX= queryProductos.filter(refCategoria=x.id)
+                for p in productosCatX:
+                    if(p.isBestProduct and p.esVisible):
+                        mejoresProductosArray.append(p)
+            
+            for mp in mejoresProductosArray:
+                print(mp.nombre)
+        results = self.paginate_queryset(mejoresProductosArray,request)
+        serializer = ProductoCategoriaSerializer_get(results, many=True)
+        return self.get_paginated_response(serializer.data)
+
+
 
 class ProductoCategoriaApiView_Detail(APIView):
     """
