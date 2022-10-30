@@ -20,6 +20,7 @@ from baseApp.api.views import CategoriaApiView, CategoriaApiView_Detail
 from baseApp.api.views import ProductoCategoriaApiView, ProductoCategoriaApiView_Detail
 from baseApp.api.views import OrdenApiView, OrdenApiView_Detail
 from baseApp.api.views import ProductoOrdenApiView, ProductoOrdenApiView_Detail
+from baseApp.api.views import mercadoPagoApiView
 
 # Aca tenemos el endpoint para los Mejores Productos
 from baseApp.api.views import ProductoCategoriaMejoresProductos
@@ -74,8 +75,9 @@ urlpatterns = [
     path('api/productoCategorias/',ProductoCategoriaApiView.as_view()),
     path('api/productoCategorias/<int:pk>/',ProductoCategoriaApiView_Detail.as_view()),
 
-    #Ruta pára MejoresProductos
+    #Ruta para MejoresProductos
     path('api/productoCategoriaMejoresProductos/',ProductoCategoriaMejoresProductos.as_view()),
+    
     #Rutas para Orden
     path('api/ordens/',OrdenApiView.as_view()),
     path('api/ordens/<int:pk>/',OrdenApiView_Detail.as_view()),
@@ -83,6 +85,10 @@ urlpatterns = [
     #Rutas para ProductoOrden
     path('api/productoOrdens/',ProductoOrdenApiView.as_view()),
     path('api/productoOrdens/<int:pk>/',ProductoOrdenApiView_Detail.as_view()),
+
+    #Rutas para MERCADOPAGO
+    path('api/mercadoPago/',mercadoPagoApiView.as_view()),
+
 
 
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

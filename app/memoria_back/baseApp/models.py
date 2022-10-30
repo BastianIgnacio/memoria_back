@@ -1,10 +1,16 @@
 from distutils.command.upload import upload
 from tkinter import CASCADE
 from unittest.mock import DEFAULT
+from urllib import response
 from django.db import models
+from requests import request
 from user.models import User
 import datetime
+import time
+import threading
 from PIL import Image
+import requests
+
 
 # Create your models here.
 """ Clase LocalComercial representa una tienda virtual"""
@@ -17,8 +23,8 @@ class LocalComercial(models.Model):
     tieneRetiroLocal = models.BooleanField(default=False)
     estado = models.CharField(max_length=20)
     abierto = models.BooleanField(default=False)
-    privateKeyMercadopago = models.CharField(max_length=50)
-    publicKeyMercadopago = models.CharField(max_length=50)
+    accessTokenMercadopago = models.CharField(max_length=80,default='--')
+    publicKeyMercadopago = models.CharField(max_length=80)
     tieneMercadopago = models.BooleanField(default=False)
     pagoRetiroLocalEfectivo = models.BooleanField(default=False);
     pagoRetiroLocalPos = models.BooleanField(default=False);
@@ -38,8 +44,64 @@ class Venta(models.Model):
     tipoPago = models.CharField(max_length=50)
     estadoPago = models.CharField(max_length=50, default='NO_PAGADO')
     estadoVenta = models.CharField(max_length=50, default='EN_PROCESO')
+    pagadoViaMercadopago = models.BooleanField(default=False)
+    mercadopago_external_reference = models.CharField(max_length=100, default='-')
+    mercadopago_preference_id = models.CharField(max_length=100, default='-')
+    mercadopago_status = models.CharField(max_length=100, default='-')
+    mercadopago_payment_id = models.CharField(max_length=100, default='-')
+    mercadopago_collection_id = models.CharField(max_length=100, default='-')
+    mercadopago_collection_status = models.CharField(max_length=100, default='-')
+    mercadopago_merchant_order_id = models.CharField(max_length=100, default='-')
     fecha = models.DateTimeField(auto_now_add=True)
     refLocalComercial = models.ForeignKey(LocalComercial,on_delete=models.CASCADE,default=1)
+
+    def updateEstadoPreference(preferenceId):
+        time.sleep(3)
+        print("Primer llamado a la api usando hilos")
+        print(preferenceId)
+        time.sleep(3)
+        print("Segundo llamado a la  api usando hilos")
+        print(preferenceId)
+        time.sleep(3)
+        print("Tercer llamado a la api usando hilos")
+        print(preferenceId)
+
+    def save(self,*args,**kwargs):
+        super().save(*args,**kwargs)
+        
+        if self.pagadoViaMercadopago:
+            def updateEstadoPreference(external_reference):
+                # Ahora teniendo el external_reference
+                # Debemos llamar a la api de mercadopago
+                # Ver el estado del pago
+                # results.length === 0 --> no se ha pagado
+                # results-length === 1 --> El pago se ha generado
+
+                headers = {"Authorization": "Bearer TEST-1903893011363375-092614-91c2a1fe64a3aa4c783266504a8d39cc-152372056"}
+                url = "https://api.mercadopago.com/v1/payments/search?external_reference="+external_reference
+
+                time.sleep(10)
+                print("Primer llamado a la api usando hilos")
+                response = requests.get(url, headers=headers)
+                print(response)
+
+                time.sleep(15)
+                print("Segundo llamado a la  api usando hilos")
+                response = requests.get(url, headers=headers)
+                print(response)
+
+                time.sleep(15)
+                print("Tercer llamado a la api usando hilos")
+                response = requests.get(url, headers=headers)
+                print(response)
+
+                time.sleep(15)
+                print("Cuarto llamado a la api usando hilos")
+                response = requests.get(url, headers=headers)
+                print(response)
+            x = threading.Thread(target=updateEstadoPreference, args=(self.mercadopago_external_reference,))
+            x.start()
+    
 
 """ Clase ProductoVenta representa un producto que tiene una venta, con la finalidad de obtener 
 todos los productos que posee una venta """

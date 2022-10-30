@@ -25,6 +25,8 @@ from baseApp.api.serializers import ProductoOrdenSerializer_get, ProductoOrdenSe
 
 from rest_framework.pagination import LimitOffsetPagination
 
+import mercadopago
+
 class LocalComercialApiView(APIView, LimitOffsetPagination):
     """
     List all LocalComercial, or create a new LocalComercial.
@@ -461,3 +463,26 @@ class ProductoOrdenApiView_Detail(APIView):
             raise Http404
         productoOrden.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class mercadoPagoApiView(APIView):
+    """
+    Create a preference of mercadoPago SDK
+    """
+
+    def post(self, request):
+        # Debemos obtener el id del local comercial
+        # Debemos obtener el access token del local comercial
+        # Agrega credenciales
+        sdk = mercadopago.SDK('TEST-1903893011363375-092614-91c2a1fe64a3aa4c783266504a8d39cc-152372056')
+       
+        # Crea un ítem en la preferencia
+        preference_data = self.request.data
+        preference_response = sdk.preference().create(preference_data)
+        preference = preference_response["response"]    
+        return Response(status=status.HTTP_201_CREATED, data=preference)
+    
+    def get(self, request, format=None):
+        external_reference = request.query_params.get('external_reference')
+        #Aca debemos llamar al 
+        return Response(status=status.HTTP_201_CREATED, data=external_reference)
+
